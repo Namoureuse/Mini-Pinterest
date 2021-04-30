@@ -1,0 +1,14 @@
+html
+{
+	font-family: trebuchet ms;
+	margin: 5px;
+	margin-bottom: 10px;
+}
+
+.div_gris
+{
+	background-color: rgb(191, 243, 165);
+	color: green;
+	padding: 10px;
+	border-radius: 5px;
+}
