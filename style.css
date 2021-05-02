@@ -1,8 +1,15 @@
-html
+div
 {
 	font-family: trebuchet ms;
 	margin: 5px;
 	margin-bottom: 10px;
+}
+
+.photo
+{
+	max-width: 200px;
+	max-height: 200px;
+	margin-right: 10px;
 }
 
 .div_gris
