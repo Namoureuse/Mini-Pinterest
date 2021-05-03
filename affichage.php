@@ -40,35 +40,35 @@
 
 		<div>
 			<?php
-				echo "<img src='" . $photoName . "' class = 'photo'/>";
+				echo "<img src='" . $photoName . "' class = 'photo_detail'/>";
 			?>
 
-			<table border="solid">
-				<tr>
-					<td>
+			<table class="tab">
+				<tr class="ligne">
+					<td class="bordure">
 						Description
 					</td>
-					<td>
+					<td class="bordure">
 						<?php
 							echo $photoDesc;
 						?>
 					</td>
 				</tr>
 				<tr>
-					<td>
+					<td class="bordure">
 						Nom
 					</td>
-					<td>
+					<td class="bordure">
 						<?php
 							echo $photoName;
 						?>
 					</td>
 				</tr>
 				<tr>
-					<td>
+					<td class="bordure">
 						Catégorie
 					</td>
-					<td>
+					<td class="bordure">
 						<?php
 							echo $categName;
 						?>

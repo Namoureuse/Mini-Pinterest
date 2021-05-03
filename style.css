@@ -12,6 +12,24 @@ div
 	margin-right: 10px;
 }
 
+.photo_detail
+{
+	max-width: 300px;
+	max-height: 300px;
+	float: left;
+	margin-right: 20px;
+}
+
+table.tab
+{
+	border-collapse: collapse;
+}
+
+td.bordure
+{
+	border: 1px solid grey;
+	padding: 5px;
+}
 .div_gris
 {
 	background-color: rgb(191, 243, 165);
