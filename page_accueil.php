@@ -6,79 +6,78 @@
 
 <!doctype html>
 <html lang="fr">
-<head>
-    <meta charset="utf-8">
-    <title>Application Mini-Pinterest</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="bootstrap.css">
-    <link rel="stylesheet" href="page_acceuil.css">
-</head>
-<body>
+  <head>
+      <meta charset="utf-8">
+      <title>Application Mini-Pinterest</title>
+      <link rel="stylesheet" href="style.css">
+  </head>
 
+  <body>
+      <div class="div_gris">
+        x photo(s) sélectionnées
+      </div>
 
-    <div class="div_gris">
-      x photo(s) sélectionnées
-    </div>
+      <div>
+        <form action="page_accueil.php" method="post">
+          <table class="choix_photo">
+          	<tr>
+          	<td>Quelles photos souhaitez-vous afficher?</td>
+          	<td>
+              <?php
+               // $categorie = executeQuery($GLOBALS['db'], "SELECT nomCat FROM categorie");
+                $queryCategories = executeQuery($db, "SELECT * FROM categorie");
+                $categories = $queryCategories->fetch_all(MYSQLI_ASSOC);
+              ?>
+              <select name="cat_id" >
+                  <option value="">Toutes les photos</option>
+                  <?php
+                      foreach ($categories as $categorie) {
+                          $selected = (isset($_POST['cat_id']) && $_POST['cat_id'] == $categorie['catId'])
+                            ? " selected"
+                            : "";
+                          echo "<option value=".$categorie['catId'].$selected.">".$categorie['nomCat']."</option>";
+                      }
+                  ?>
+              </select>
+              <input type="submit" name="valider" value="Valider"/>
+          	</td>
+          	</tr>
+          </table>
+        </form>
+      </div>
 
-    <div>
-      <form action="page_accueil.php" method="post">
-        <table class="choix_photo">
-        	<tr>
-        	<td>Quelles photos souhaitez-vous afficher?</td>
-        	<td>
-            <?php
-             // $categorie = executeQuery($GLOBALS['db'], "SELECT nomCat FROM categorie");
-              $queryCategories = executeQuery($db, "SELECT * FROM categorie");
-              $categories = $queryCategories->fetch_all(MYSQLI_ASSOC);
-            ?>
-            <select name="cat_id" >
-                <option value="">Toutes les photos</option>
-                <?php
-                    foreach ($categories as $categorie) {
-                        $selected = (isset($_POST['cat_id']) && $_POST['cat_id'] == $categorie['catId'])
-                          ? " selected"
-                          : "";
-                        echo "<option value=".$categorie['catId'].$selected.">".$categorie['nomCat']."</option>";
-                    }
-                ?>
-            </select>
-            <input type="submit" name="valider" value="Valider"/>
-        	</td>
-        	</tr>
-        </table>
-      </form>
-    </div>
-
-  <?php
-    if(isset($_POST['cat_id']) && $_POST['cat_id'] != "") {
-      $queryCategorie = executeQuery($db, "SELECT * FROM categorie WHERE catId =".$_POST['cat_id']);
-      $cat = $queryCategorie->fetch_assoc();
-      $catName = $cat['nomCat'];
-    } else {
-      $catName = "Toutes les photos";
-    }
-  ?>
-
-  <h1>
-    <?php echo $catName; ?>
-  </h1>
-
-  <div class="allphotos">
     <?php
-      $queryPhotosWhere = (isset($_POST['cat_id']) && $_POST['cat_id'] != "")
-        ? " WHERE catId = ".$_POST['cat_id']
-        : "";
-      $queryPhotos = executeQuery($db, "SELECT * FROM photo".$queryPhotosWhere);
-      $photos = $queryPhotos->fetch_all(MYSQLI_ASSOC);
-
-      foreach ($photos as $photo) {
-          echo "<a href='affichage.php?photoId=" . $photo['photoId'] . "'><img src='" . $photo['nomFich'] . "' class = 'photo'/></a>";
+      if(isset($_POST['cat_id']) && $_POST['cat_id'] != "") {
+        $queryCategorie = executeQuery($db, "SELECT * FROM categorie WHERE catId =".$_POST['cat_id']);
+        $cat = $queryCategorie->fetch_assoc();
+        $catName = $cat['nomCat'];
+      } else {
+        $catName = "Toutes les photos";
       }
     ?>
-  </div>
-</body>
+
+    <h1>
+      <?php echo $catName; ?>
+    </h1>
+
+    <div class="allphotos">
+      <?php
+        $queryPhotosWhere = (isset($_POST['cat_id']) && $_POST['cat_id'] != "")
+          ? " WHERE catId = ".$_POST['cat_id']
+          : "";
+        $queryPhotos = executeQuery($db, "SELECT * FROM photo".$queryPhotosWhere);
+        $photos = $queryPhotos->fetch_all(MYSQLI_ASSOC);
+
+        foreach ($photos as $photo) {
+            echo "<a href='affichage.php?photoId=" . $photo['photoId'] . "'>
+                    <img src='" . $photo['nomFich'] . "' class = 'photo' alt='". $photo['description'] ."'/>
+                  </a>";
+        }
+      ?>
+    </div>
+  </body>
 </html>
 
 <?php
-closeConnexion($db);
+  closeConnexion($db);
 ?>

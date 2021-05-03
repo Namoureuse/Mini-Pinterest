@@ -15,8 +15,6 @@
 	    <meta charset="utf-8">
 	    <title>Détails Mini-Pinterest</title>
 	    <link rel="stylesheet" href="style.css">
-	    <link rel="stylesheet" href="bootstrap.css">
-	    <link rel="stylesheet" href="page_acceuil.css">
 	</head>
 
 	<body>
@@ -43,10 +41,40 @@
 		<div>
 			<?php
 				echo "<img src='" . $photoName . "' class = 'photo'/>";
-				echo "Description : " . $photoDesc;
-				echo "Nom du fichier : " . $photoName;
-				echo "Catégorie : " . $categName;
 			?>
+
+			<table border="solid">
+				<tr>
+					<td>
+						Description
+					</td>
+					<td>
+						<?php
+							echo $photoDesc;
+						?>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Nom
+					</td>
+					<td>
+						<?php
+							echo $photoName;
+						?>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Catégorie
+					</td>
+					<td>
+						<?php
+							echo $categName;
+						?>
+					</td>
+				</tr>
+			</table>
 		</div>
 	</body>
 </html>
