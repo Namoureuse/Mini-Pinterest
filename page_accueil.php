@@ -64,27 +64,17 @@
   </h1>
 
   <div class="allphotos">
-  <?php
-    $queryPhotosWhere = (isset($_POST['cat_id']) && $_POST['cat_id'] != "")
-      ? " WHERE catId = ".$_POST['cat_id']
-      : "";
-    $queryPhotos = executeQuery($db, "SELECT * FROM photo".$queryPhotosWhere);
-    $photos = $queryPhotos->fetch_all(MYSQLI_ASSOC);
+    <?php
+      $queryPhotosWhere = (isset($_POST['cat_id']) && $_POST['cat_id'] != "")
+        ? " WHERE catId = ".$_POST['cat_id']
+        : "";
+      $queryPhotos = executeQuery($db, "SELECT * FROM photo".$queryPhotosWhere);
+      $photos = $queryPhotos->fetch_all(MYSQLI_ASSOC);
 
-    foreach ($photos as $photo) {
-        echo "<a href='affichage.php?photoId=" . $photo['photoId'] . "'><img src='" . $photo['nomFich'] . "' class = 'photo'/></a>";
-    }
-    /*$photo_Id = executeQuery($GLOBALS['db'], "SELECT photoId FROM photo");
-    while ($ligne_photoId = $photo_Id->fetch_assoc())
-    {
-      $nom_photo = executeQuery($GLOBALS['db'], "SELECT nomFich FROM photo WHERE photoId = " . $ligne_photoId["photoId"] );
-      $ligne_nomphotoId = $nom_photo->fetch_assoc();
-      $photos= opendir($repertoire);
-      /*foreach ($photos as $photo):
-          echo "<a href='affichage.php?photoId=" . $ligne_photoId["photoId"] . "'><img src='" . $photo . "' class = 'assets'/></a>";
-  endforeach;*/
-    //}
-  ?>
+      foreach ($photos as $photo) {
+          echo "<a href='affichage.php?photoId=" . $photo['photoId'] . "'><img src='" . $photo['nomFich'] . "' class = 'photo'/></a>";
+      }
+    ?>
   </div>
 </body>
 </html>
