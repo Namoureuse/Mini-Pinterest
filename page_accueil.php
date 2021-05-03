@@ -15,7 +15,10 @@
   <body>
       <div class="div_gris">
         x photo(s) sélectionnées
+        <input type="submit" value="Connexion" />
       </div>
+
+
 
       <div>
         <form action="page_accueil.php" method="post">

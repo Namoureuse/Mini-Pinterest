@@ -70,7 +70,7 @@
 					</td>
 					<td class="bordure">
 						<?php
-							echo $categName;
+							echo "<a href='page_accueil.php'>".$categName."</a>";
 						?>
 					</td>
 				</tr>
