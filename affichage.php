@@ -24,7 +24,7 @@
 		      $photo = $queryPhoto->fetch_assoc();
 		      $photoName = $photo['nomFich'];
 		      $photoDesc = $photo['description'];
-		      $queryCat = executeQuery($db, "SELECT nomCat FROM categorie NATURAL JOIN photo WHERE photoId =".$_GET['photoId']);
+		      $queryCat = executeQuery($db, "SELECT * FROM categorie NATURAL JOIN photo WHERE photoId =".$_GET['photoId']);
 		      $categ = $queryCat->fetch_assoc();
 		      $categName = $categ['nomCat'];
 		    }
