@@ -1,4 +1,4 @@
-<?php
+<?php session_start();
 	require_once('bd.php');
 	require_once('administrateur.php');
 	require_once('utilisateur.php');
