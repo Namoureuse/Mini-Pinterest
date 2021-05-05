@@ -133,7 +133,7 @@ if (isset($_POST['submit'])) {
         if($_POST['dowpdown']==1){
             if(checkAvailabilityAdministrateur($pseudo, $link)==1){
                 registerAdministrateur($pseudo, $pwd, $link);
-                header('Location: https://bdw1.univ-lyon1.fr/p1926029/BDW1-ProjetFinale/bdw1_projet/connexion.php');
+                header('Location:https://bdw1.univ-lyon1.fr/p1905392/bdw1tp/connexion.php');
                 exit();
             }
             else {
@@ -143,7 +143,7 @@ if (isset($_POST['submit'])) {
         else if($_POST['dowpdown']==0){
             if(checkAvailabilityUtilisateur($pseudo, $link)==1){
                 registerUtilisateur($pseudo, $pwd, $link);
-                header('Location: https://bdw1.univ-lyon1.fr/p1926029/BDW1-ProjetFinale/bdw1_projet/connexion.php');
+                header('Location: https://bdw1.univ-lyon1.fr/p1905392/bdw1tp/connexion.php');
                 exit();
             }
             else {
@@ -156,7 +156,7 @@ if (isset($_POST['submit'])) {
 
 
 if (isset($_POST['accueil'])) {
-    header('Location: https://bdw1.univ-lyon1.fr/p1926029/BDW1-ProjetFinale/bdw1_projet/accueil.php');
+    header('Location: https://bdw1.univ-lyon1.fr/p1905392/bdw1/page_accueil.php');
     exit();
 }
 ?>
