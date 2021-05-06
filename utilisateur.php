@@ -8,7 +8,6 @@ function checkAvailabilityUtilisateur($db, $pseudo)
 	$query = "SELECT pseudo FROM utilisateur WHERE pseudo = '". $pseudo ."';";
 	$resultat = executeQuery($db, $query);
 	return mysqli_num_rows($resultat)==0;
-
 }
 
 /*Cette fonction prend en entrée un pseudo et un mot de passe, associe une couleur aléatoire dans le tableau de taille fixe
@@ -21,20 +20,42 @@ function registerUtilisateur($db, $role, $pseudo, $hashPwd)
 
 /*Cette fonction prend en entrée un pseudo d'utilisateur et change son état en 'connected' dans la relation
 utilisateur via la connexion*/
-function setConnectedUtilisateur($db, $pseudo)
+function setConnectedUtilisateur($db, $id)
 {
-	$query = "UPDATE utilisateur SET etat = 'connected' WHERE pseudo = '". $pseudo ."';";
+	$query = "UPDATE utilisateur SET etat = 'connected', connectedOn ='" . date("Y-m-d H:i:s") . "' WHERE id = '". $id ."';";
 	executeUpdate($db, $query);
-	
 }
 
 /*Cette fonction prend en entrée un pseudo et mot de passe et renvoie vrai si l'utilisateur existe (au moins un tuple dans le résultat), faux sinon*/
-function getUserUtilisateur($db, $pseudo, $hashPwd)
+function isConnected()
 {
-	
-	$query = "SELECT pseudo FROM utilisateur WHERE pseudo = '". $pseudo ."' AND mdp = '". $hashPwd ."' AND etat = 'disconnected';";
-	$resultat = executeQuery($db, $query);
-	return mysqli_num_rows($resultat);
+	if(isset($_SESSION['userId']) && !is_null($_SESSION['userId'])){
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function connectionTime($connectedOn)
+{
+	$time = 0;
+	if(!is_null($connectedOn)) {
+		$connectedDatetimeObject = new DateTime($connectedOn);
+
+		$currentDate = date("Y-m-d H:i:s");
+		$currentDateObject = new DateTime($currentDate);
+
+		$interval = $connectedDatetimeObject->diff($currentDateObject);
+		$time = $interval->format("%H:%I:%S");
+	}
+	return $time;
+}
+
+function getUserFromConnection($db, $pseudo, $hashPwd)
+{
+	$query = "SELECT id, etat FROM utilisateur WHERE pseudo = '". $pseudo ."' AND mdp = '". $hashPwd ."'";
+	$result = executeQuery($db, $query);
+	return mysqli_fetch_assoc($result);
 }
 
 /*Cette fonction renvoie un tableau (array) contenant tous les pseudos d'utilisateurs dont l'état est 'connected'*/
@@ -53,10 +74,18 @@ function getConnectedUsersUtilisateur($db)
 
 /*Cette fonction prend en entrée un pseudo d'utilisateur et change son état en 'disconnected' dans la relation
 utilisateur via la connexion*/
-function setDisconnectedUtilisateur($db, $pseudo)
+function setDisconnectedUtilisateur($db, $id)
 {
-	$query = "UPDATE utilisateur SET etat = 'disconnected' WHERE pseudo = '". $pseudo ."';";
+	$query = "UPDATE utilisateur SET etat = 'disconnected' WHERE id = '". $id ."';";
 	executeUpdate($db, $query);
+	unset($_SESSION['userId']);
+}
+
+function getUserFromSession($db, $id)
+{
+	$query = "SELECT pseudo, connectedOn FROM utilisateur WHERE id = '". $id ."';";
+	$result = executeQuery($db, $query);
+	return mysqli_fetch_assoc($result);
 }
 
 ?>

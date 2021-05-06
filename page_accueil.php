@@ -1,22 +1,24 @@
 <?php
   session_start();
   require_once('bd.php');
+  require_once('utilisateur.php');
   $db=getDB();
   $repertoire="data/";
 
-  $logged = "Connexion";
+  $isConnected = isConnected();
 
-  var_dump($_SESSION["logged"]);
-
-  if(isset($_SESSION["logged"])){
-      $logged = $_SESSION["logged"];
-  }else{
-      session_unset();
-      //header('Location: connexion.php');
+  if ($isConnected){
+    $user = getUserFromSession($db, $_SESSION['userId']);
+  } else {
+    $user = null;
+  }
+  if(!is_null($user)){
+    $connectionTime = connectionTime($user['connectedOn']);
+  } else {
+    $connectionTime = null;
   }
 
-
-  $queryPhotosWhere = (isset($_GET['cat']) && $_GET['cat'] != "")
+  $queryPhotosWhere = (isset($_GET['cat']) && $_GET['cat'] != "all")
     ? " WHERE catId = ".$_GET['cat']
     : "";
   $queryPhotos = executeQuery($db, "SELECT * FROM photo".$queryPhotosWhere);
@@ -32,10 +34,23 @@
   </head>
 
   <body>
+      <div>
+        <?php if($isConnected){
+            echo "Utilisateur : " .  $user['pseudo'] . "</br>Connecté depuis : " . $connectionTime;
+          }
+        ?> 
+      </div>
       <div class="div_gris">
         <?php echo count($photos); ?> photo(s) sélectionnées
         <div class="pos_right">
-            <a href='connexion.php'> <?php echo $logged ?> </a>
+                <?php if(!$isConnected){
+                    echo '<a href="connexion.php">Connexion</a>' . " ";
+                  } else {
+                    echo '<a href="deconnexion.php">Déconnexion</a>' . " ";
+                    
+                  }
+                ?> 
+            </a>
             <a href='inscription.php'> Inscription </a>
         </div>
       </div>
@@ -52,7 +67,7 @@
                 $categories = $queryCategories->fetch_all(MYSQLI_ASSOC);
               ?>
               <select name="cat" >
-                  <option value="">Toutes les photos</option>
+                  <option value="all">Toutes les photos</option>
                   <?php
                       foreach ($categories as $categorie) {
                           $selected = (isset($_GET['cat']) && $_GET['cat'] == $categorie['catId'])
@@ -70,7 +85,7 @@
       </div>
 
     <?php
-      if(isset($_GET['cat']) && $_GET['cat'] != "") {
+      if(isset($_GET['cat']) && $_GET['cat'] != "all") {
         $queryCategorie = executeQuery($db, "SELECT * FROM categorie WHERE catId =".$_GET['cat']);
         $cat = $queryCategorie->fetch_assoc();
         $catName = $cat['nomCat'];
@@ -87,9 +102,7 @@
       <?php
 
         foreach ($photos as $photo) {
-            echo "<a href='affichage.php?photoId=" . $photo['photoId'] . "'>
-                    <img src='" . $photo['nomFich'] . "' class = 'photo' alt='". $photo['description'] ."'/>
-                  </a>";
+            echo '<a href="affichage.php?photoId=' . $photo['photoId'] . '"><img src="' . $photo['nomFich'] . '" class = "photo" alt="'. $photo['description'] .'"/></a>';
         }
       ?>
     </div>

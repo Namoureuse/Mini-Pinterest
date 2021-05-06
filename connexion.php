@@ -1,28 +1,51 @@
 <?php
+	session_start();
  	require_once('bd.php');
  	require('utilisateur.php');
-
+	$db = getDB();
  	$stateMsg = "";
+ 	$isConnected = isConnected();
+   
+   	if (isset($_POST['valider'])) {
+   		$error = false;
+   		$user = null;
+        $pseudo = $_POST["pseudo"];
+        $pwd = $_POST["motdepasse"];
 
-	if(isset($_POST["valider"])){
-	    $pseudo = $_POST["pseudo"];
-	    $hashMdp = md5($_POST["mdp"]);
-	    
-	    $db = getDB();
-	    
-	    $exist = getUserUtilisateur($db, $pseudo, $hashMdp);
-
-	    if($exist){
-	        setConnected($db, $pseudo);
-	        $_SESSION["logged"] = "Déconnexion";
-	        header('Location: page_accueil.php');
-	        exit();
-	    } else{
-	        $stateMsg = "Le couple pseudo/mot de passe ne correspond &agrave; aucun utilisateur enregistr&eacute;";
+	    if (empty($pseudo)){
+	      $wrongpseudo = "Pseudo incorrect.";
+	      $error = true;
+	    } else {
+	          $pseudo = tests($pseudo);
+	          $wrongpseudo = "";
 	    }
-	}
+	    if (empty($pwd)) {
+	          $wrongpwd = "Mot de passe incorrect.";
+	          $error = true;
+	    } else {
+	          $pwd = tests($pwd);
+	    }
 
+	    if(!$error){
+	    	$user = getUserFromConnection($db, $pseudo, $pwd);
 
+	    	if (!$user){
+	    		$error = true;
+	    		$stateMsg = "Pseudo/mot de passe incorrect.";
+	    	} 
+	    	if(!$error && $user["etat"] == "connected") {
+	    		$error = true;
+	    		$stateMsg = "Déjà connecté.";
+	    	}	
+	    }
+
+	    if(!$error && !is_null($user)) {
+	        setConnectedUtilisateur($db, $user["id"]);
+	        $_SESSION["userId"] = $user["id"];
+	        header('Location:page_accueil.php');
+	        exit();
+	    }
+	  }
 ?>
 
 <!doctype html>
@@ -32,22 +55,53 @@
 	  <title>Connexion pour modifier le catalogue</title>
 	  <link rel="stylesheet" href="style.css">
 	</head>
-
 	<body>
 		<div class="loginBanner">
 			<h1>Connexion pour modifier le catalogue</h1>
-		    <div class="errorMsg"><?php echo $stateMsg; ?></div>
-		    <?php if(isset($successMsg)){echo $successMsg;} ?>
-		        <form action="index.php" method="POST">
-		            <table>
-		                <tr>
-		                	<td class="loginInfo">Pseudo</td><td><input type="text" name="pseudo"></td>
-		               		<td class="loginInfo">Mot de passe</td><td><input type="password" name="mdp"></td>
-		               		<td><input class="button" type="submit" name="valider" value="Se connecter"></td>
-		                </tr>       
-		                <br/>	                
-		            </table>
-		        </form>
+				<?php if(!$isConnected){ ?>
+					<form action="connexion.php" method="post">
+			            <table>
+			                   	<td class="loginInfo">Pseudo</td><td><input type="text" name="pseudo" id="pseudo" placeholder="Pseudo">
+	                            <small class="col-10">
+	                                <?php
+	                                if(isset($wrongpseudo) && $wrongpseudo){
+	                                    echo $wrongpseudo;}
+	                                ?>
+	                            </small></td>
+			               		<td class="loginInfo">Mot de passe</td><td><input type="password" name="motdepasse">
+	                               <small class="col-10">
+	                               <?php
+	                                if(isset($wrongpwd) && $wrongpwd){
+	                                    echo $wrongpwd;
+	                                }
+	                                ?>
+	                            </small></td>
+			               		<td><input class="button" type="submit" name="valider" value="Se connecter"></td>
+			                </tr>       
+			                <br/>	                
+			            </table>
+			        </form>
+			<?php	} else {?>
+
 		   </div>
-	</body>
+
+		   <div>
+		   		Déjà connecté
+		   </div>
+
+		<?php } ?>
+
+			<div>
+		   		<a href="page_accueil.php"> Page d'accueil </a>
+		   </div>
+           
+<?php
+	function tests($donnees){
+	  $donnees = trim($donnees);
+	  $donnees = stripslashes($donnees);
+	  $donnees = htmlspecialchars($donnees);
+	  return $donnees;
+	}
+?>
+</body>
 </html>

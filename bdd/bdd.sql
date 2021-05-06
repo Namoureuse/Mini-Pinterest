@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : jeu. 06 mai 2021 à 10:09
+-- Généré le : jeu. 06 mai 2021 à 17:45
 -- Version du serveur :  5.7.31
 -- Version de PHP : 7.3.21
 
@@ -100,6 +100,7 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   `pseudo` varchar(255) NOT NULL,
   `mdp` varchar(255) NOT NULL,
   `etat` varchar(255) NOT NULL,
+  `connectedOn` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `pseudo` (`pseudo`)
 ) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
@@ -108,14 +109,14 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
 -- Déchargement des données de la table `utilisateur`
 --
 
-INSERT INTO `utilisateur` (`id`, `roleId`, `pseudo`, `mdp`, `etat`) VALUES
-(1, 0, 'p1905392', '', 'disconnected'),
-(2, 2, 'sonia', '1234', 'disconnected'),
-(4, 2, 'coucou', '1234', 'disconnected'),
-(5, 2, 'da', '1234', 'disconnected'),
-(6, 2, 'aeae', '1234', 'disconnected'),
-(8, 2, 'efbz', '1234', 'disconnected'),
-(9, 2, 'yuubgdzq', '1234', 'disconnected');
+INSERT INTO `utilisateur` (`id`, `roleId`, `pseudo`, `mdp`, `etat`, `connectedOn`) VALUES
+(1, 0, 'p1905392', '', 'disconnected', NULL),
+(2, 2, 'sonia', '1234', 'connected', '2021-05-06 17:38:38'),
+(4, 2, 'coucou', '1234', 'disconnected', NULL),
+(5, 2, 'da', '1234', 'disconnected', NULL),
+(6, 2, 'aeae', '1234', 'disconnected', NULL),
+(8, 2, 'efbz', '1234', 'disconnected', NULL),
+(9, 2, 'yuubgdzq', '1234', 'disconnected', NULL);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
