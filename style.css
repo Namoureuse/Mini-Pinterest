@@ -37,3 +37,8 @@ td.bordure
 	padding: 10px;
 	border-radius: 5px;
 }
+
+.pos_right
+{
+	float: right;
+}

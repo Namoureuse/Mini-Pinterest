@@ -1,15 +1,17 @@
 <?php
 
-$dbHost="localhost"; 
-$dbUser="root"; 
-$dbPwd=""; 
-$dbName="p1905223";
+
 
 /*Cette fonction prend en entrée l'identifiant de la machine hôte de la base de données, les identifiants (login, mot de passe) d'un utilisateur autorisé 
 sur la base de données contenant les tables pour le chat et renvoie une connexion active sur cette base de donnée. Sinon, un message d'erreur est affiché.*/
-function getDB($dbHost,$dbUser,$dbPwd, $dbName)
+function getDB()
 {
-    $db=mysqli_connect($dbHost,$dbUser,$dbPwd, $dbName);
+    $dbHost="localhost"; 
+	$dbUser="root"; 
+	$dbPwd=""; 
+	$dbName="p1905223";
+	
+	$db=mysqli_connect($dbHost,$dbUser,$dbPwd, $dbName);
     if(mysqli_connect_errno())
     {
         echo "Échec lors de la connexion à la base de données: ".mysqli_connect_errno().")";

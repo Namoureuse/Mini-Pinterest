@@ -1,12 +1,11 @@
-<?php session_start();
+<?php 
+	session_start();
 	require_once ('bd.php');
 
-	$db=getDB($dbHost,$dbUser,$dbPwd, $dbName);
+	$db=getDB();
 	$repertoire="data/";
 
 	$photoID=$_GET['photoId'];
-	$_SESSION['photoId']=$photoID;
-	if(isset($_SESSION['']))
 ?>
 
 <!doctype html>
@@ -27,6 +26,7 @@
 		      $queryCat = executeQuery($db, "SELECT * FROM categorie NATURAL JOIN photo WHERE photoId =".$_GET['photoId']);
 		      $categ = $queryCat->fetch_assoc();
 		      $categName = $categ['nomCat'];
+		      $categId = $categ['catId'];
 		    }
 		?>
 
@@ -70,7 +70,7 @@
 					</td>
 					<td class="bordure">
 						<?php
-							echo "<a href='page_accueil.php'>".$categName."</a>";
+							echo "<a href='page_accueil.php?cat=" . $categId . "'>".$categName."</a>";
 						?>
 					</td>
 				</tr>

@@ -1,7 +1,68 @@
-<?php session_start();
+<?php 
+    session_start();
 	require_once('bd.php');
-	require_once('administrateur.php');
+	//require_once('administrateur.php');
 	require_once('utilisateur.php');
+    $link = getDB();
+
+    if (isset($_POST['submit'])) {
+        $error = false;
+        $role = $_POST["role"];
+        $pseudo = $_POST["pseudo"];
+        $pwd = $_POST["motdepasse"];
+        $confirm_pwd = $_POST["confirm_motdepasse"];
+
+        if(empty($role)) {
+            $wrongrole = "Il faut choisir un rôle.";
+            $error = true;
+        }
+        else {
+            if ($role != 1 && $role != 2){
+                $wrongrole = "Rôle incorrect.";
+                $error = true;
+            } else {
+                $wrongrole = "";
+            }
+        }
+        if (empty($pseudo)) {
+            $wrongpseudo = "Il faut choisir un pseudo";
+            $error = true;
+        }
+        else {
+            $pseudo = tests($pseudo);
+            if (checkAvailabilityUtilisateur($link, $pseudo)==0) {
+                $wrongpseudo = "Pseudo déjà utilisé.";
+                $error = true;
+             } else {
+                $wrongpseudo = "";
+             } 
+        }
+        if (empty($pwd)) {
+            $wrongpwd = "le mot de passe est requis";
+            $error = true;
+        }
+        else {
+            $pwd = tests($pwd);
+        }
+        if (empty($confirm_pwd)) {
+            $wrongpwd2 = " Il faut confirmer le mot de passe";
+            $error = true;
+        }
+        else {
+            $confirm_pwd = tests($confirm_pwd);
+        }
+        if (!empty($pwd) && $pwd != $confirm_pwd){
+            $wrongpwd = "Le mot de passe est différent.";
+            $wrongpwd2 = "La confirmation de mot de passe est différente.";
+            $error = true;
+        }
+
+        if (!$error) {
+            registerUtilisateur($link, $role, $pseudo, $pwd);
+            header('Location:connexion.php');
+            exit();
+        }
+}
 ?>
 
 <!doctype html>
@@ -16,7 +77,7 @@
 <div class="bloc">&nbsp;</div>
 <div class="row justify-content-center">
 	<div class="menu container p-4 m-4 border rounded border-lignt">
-		<form action="inscription.php" method="POST">
+		<form action="inscription.php" method="post">
             <div class="row justify-content-start">
                 <div class="col-4">
                     <p>*champs obligatoires</p>
@@ -27,10 +88,15 @@
                     <p>Selectionnez du profil</p>
                 
                 <!--<div class="col-6">!-->
-                    <select name="dowpdown" >
-                        <option value="0" SELECTED>UTILISATEUR</option>
-                        <option value="1">ADMINISTRATEUR</option>
+                    <select name="role" >
+                        <option value="2" selected>Utilisateur</option>
+                        <option value="1">Administrateur</option>
                     </select>
+                        <?php
+                            if(isset($wrongrole) && $wrongrole != ""){
+                                echo $wrongrole;
+                            }
+                        ?>
                 
                 <!--<div class="row justify-content-start p-2">
                     <div class="col-5 ">!-->
@@ -41,8 +107,9 @@
                    
                     <div class="col-1">
                         <?php
-                            if(isset($wrongpseudo) && $wrongseudo){
-                                echo $wrongpseudo;}
+                            if(isset($wrongpseudo) && $wrongpseudo != ""){
+                                echo $wrongpseudo;
+                            }
                         ?>
                     </div>
                     <div class="row justify-content-start p-2">
@@ -54,14 +121,14 @@
                         
                         <div class="col-10">
                             <?php
-                                if(isset($wrongpwd) && $wrongpwd){
+                                if(isset($wrongpwd) && $wrongpwd != ""){
                                     echo $wrongpwd;
                                 }
                             ?>
                         </div>
                         <div class="row justify-content-start p-2">
                             <!--<div class="col-5">!-->
-                                Confirmez votre Mot de passe
+                                Confirmez votre Mot de passe *
                             
                            <!-- <div class="col-6 ">!-->
                                 <input type="password" name="confirm_motdepasse" >
@@ -81,7 +148,7 @@
                 </div>
             </div>
             <div style="padding-left:2em;">
-                <a href="https://bdw1.univ-lyon1.fr/p1905392/bdw1/connexion.php"> Déja Inscrit ? </a>
+                <a href="connexion.php"> Déja Inscrit ? </a>
             </div>
         </form>
     </div>
@@ -98,69 +165,11 @@ function tests($donnees){
     return $donnees;
 }
 
-if (isset($_POST['submit'])) {
-
-    $pseudo = $_POST["pseudo"];
-    $pwd = $_POST["motdepasse"];
-    $confirm_pwd = $_POST["confirm_motdepasse"];
-
-    if (empty($_POST["pseudo"])){
-        $wrongpseudo = "Il faut choisir un pseudo";
-    }
-    else {
-        $pseudo = tests($_POST["pseudo"]);
-        $wrongpseudo = "";
-    }
-    if (empty($_POST["motdepasse"])) {
-        $wrongpwd = "le mot de passe est requis";
-    }
-    else {
-        $pwd = tests($_POST["motdepasse"]);
-    }
-    if (empty($_POST["confirm_motdepasse"])) {
-        $wrongpwd2 = " Il faut confirmer le mot de passe";
-    }
-    else {
-        $confirm_pwd = tests($_POST["confirm_motdepasse"]);
-    }
-
-    if ( isset($pwd) && $pwd != $confirm_pwd){
-        $wrongpwd = "le mot de passe est différent";
-        $wrongpwd2 = " la confirmation de mot de passe est différente";
-    }
-    if ( ! (empty($_POST["pseudo"]) || empty($_POST["motdepasse"]) || empty($_POST["confirm_motdepasse"])) ) {
-        $link = getDB('localhost', "p1905392", "", "p1905392");
-        if($_POST['dowpdown']==1){
-            if(checkAvailabilityAdministrateur($pseudo, $link)==1){
-                registerAdministrateur($pseudo, $pwd, $link);
-                header('Location:https://bdw1.univ-lyon1.fr/p1905392/bdw1tp/connexion.php');
-                exit();
-            }
-            else {
-                $pseudoErr="Pseudo Administrateur déjà utilisé";
-            }
-        }
-        else if($_POST['dowpdown']==0){
-            if(checkAvailabilityUtilisateur($pseudo, $link)==1){
-                registerUtilisateur($pseudo, $pwd, $link);
-                header('Location: https://bdw1.univ-lyon1.fr/p1905392/bdw1tp/connexion.php');
-                exit();
-            }
-            else {
-                $wrongpseudo="Pseudo Utilisateur déjà utilisé";
-            }
-        }
-
-    }
-}
-
-
 if (isset($_POST['accueil'])) {
-    header('Location: https://bdw1.univ-lyon1.fr/p1905392/bdw1/page_accueil.php');
+    header('Location: page_accueil.php');
     exit();
 }
 ?>
-
 
 </body>
 </html>

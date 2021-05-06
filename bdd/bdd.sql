@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.5deb2
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Hôte : localhost:3306
--- Généré le : jeu. 22 avr. 2021 à 17:03
--- Version du serveur :  10.3.25-MariaDB-0ubuntu0.20.04.1-log
--- Version de PHP : 7.4.3
+-- Hôte : 127.0.0.1:3306
+-- Généré le : jeu. 06 mai 2021 à 10:09
+-- Version du serveur :  5.7.31
+-- Version de PHP : 7.3.21
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -25,78 +24,98 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `Categorie`
+-- Structure de la table `administrateur`
 --
 
-CREATE TABLE `Categorie` (
-  `catId` int NOT NULL AUTO_INCREMENT,
-  `nomCat` varchar(250) CHARACTER SET utf8 DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Déchargement des données de la table `Categorie`
---
-
-INSERT INTO `Categorie` (`catId`, `nomCat`) 
-VALUES  (1, 'Anime'),  
-        (2, 'Nature'),
-        (3, 'Astronomie');
-
+DROP TABLE IF EXISTS `administrateur`;
+CREATE TABLE IF NOT EXISTS `administrateur` (
+  `adId` int(11) NOT NULL AUTO_INCREMENT,
+  `adpseudo` varchar(255) NOT NULL,
+  `adpwd` varchar(255) NOT NULL,
+  PRIMARY KEY (`adId`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `Photo`
+-- Structure de la table `categorie`
 --
 
-CREATE TABLE `Photo` (
-  `photoId` int(11) NOT NULL,
-  `nomFich` varchar(250) CHARACTER SET utf8 DEFAULT NULL,
-  `description` varchar(250) CHARACTER SET utf8 DEFAULT NULL,
-  `catId` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- 
--- Déchargement des données de la table `Photo`
---
-
-INSERT INTO `Photo` (`photoId`, `nomFich`, `description`, `catId`) VALUES
-(1, './data/koro.png', "Le personnage Koro Sensei de l'anime Assassination Classroom", 1),
-(2, './data/tokyoghoul.jpg', "Kaneki de l'anime Tokyo Ghoul", 1),
-(3, './data/another.jpg', "Mei Misaki et Koichi de l'anime Another", 1),
-(4, './data/fleur.jpg', "Image de fleurs jaunes", 2),
-(5, './data/chêne.jpg', "Image d'un chêne", 2),
-(6, './data/amazonie.jpg', "L'Amazonie vue du ciel", 2),
-(7, './data/nebuleuse.jpg', "Photo d'une nébuleuse planétaire", 3),
-(8, './data/supernovae.jpg', "Photo de l'explosion d'une supernova", 3),
-(9, './data/trounoir.jpg', "Photo d'un trou noir", 3);
+DROP TABLE IF EXISTS `categorie`;
+CREATE TABLE IF NOT EXISTS `categorie` (
+  `catId` int(11) NOT NULL AUTO_INCREMENT,
+  `nomCat` varchar(250) DEFAULT NULL,
+  PRIMARY KEY (`catId`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
--- Index pour les tables déchargées
+-- Déchargement des données de la table `categorie`
 --
 
---
--- Index pour la table `Categorie`
---
-ALTER TABLE `Categorie`
-  ADD PRIMARY KEY (`catId`);
+INSERT INTO `categorie` (`catId`, `nomCat`) VALUES
+(1, 'Anime'),
+(2, 'Nature'),
+(3, 'Astronomie');
+
+-- --------------------------------------------------------
 
 --
--- Index pour la table `Photo`
---
-ALTER TABLE `Photo`
-  ADD PRIMARY KEY (`photoId`),
-  ADD KEY `catId` (`catId`);
-
---
--- Contraintes pour les tables déchargées
+-- Structure de la table `photo`
 --
 
+DROP TABLE IF EXISTS `photo`;
+CREATE TABLE IF NOT EXISTS `photo` (
+  `photoId` int(11) NOT NULL AUTO_INCREMENT,
+  `nomFich` varchar(250) DEFAULT NULL,
+  `description` varchar(250) DEFAULT NULL,
+  `catId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`photoId`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+
 --
--- Contraintes pour la table `Photo`
+-- Déchargement des données de la table `photo`
 --
-ALTER TABLE `Photo`
-  ADD CONSTRAINT `Photo_ibfk_1` FOREIGN KEY (`catId`) REFERENCES `Categorie` (`catId`);
+
+INSERT INTO `photo` (`photoId`, `nomFich`, `description`, `catId`) VALUES
+(1, './data/koro.png', 'Le personnage Koro Sensei de l\'anime Assassination Classroom', 1),
+(2, './data/tokyoghoul.jpg', 'Kaneki de l\'anime Tokyo Ghoul', 1),
+(3, './data/another.jpg', 'Mei Misaki et Koichi de l\'anime Another', 1),
+(4, './data/fleur.jpg', 'Image de fleurs jaunes', 2),
+(5, './data/chene.jpg', 'Image d\'un chêne', 2),
+(6, './data/amazonie.jpg', 'L\'Amazonie vue du ciel', 2),
+(7, './data/nebuleuse.jpg', 'Photo d\'une nébuleuse planétaire', 3),
+(8, './data/supernovae.jpg', 'Photo de l\'explosion d\'une supernova', 3),
+(9, './data/trounoir.jpg', 'Photo d\'un trou noir', 3);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `utilisateur`
+--
+
+DROP TABLE IF EXISTS `utilisateur`;
+CREATE TABLE IF NOT EXISTS `utilisateur` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `roleId` int(10) UNSIGNED NOT NULL DEFAULT '2',
+  `pseudo` varchar(255) NOT NULL,
+  `mdp` varchar(255) NOT NULL,
+  `etat` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `pseudo` (`pseudo`)
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `utilisateur`
+--
+
+INSERT INTO `utilisateur` (`id`, `roleId`, `pseudo`, `mdp`, `etat`) VALUES
+(1, 0, 'p1905392', '', 'disconnected'),
+(2, 2, 'sonia', '1234', 'disconnected'),
+(4, 2, 'coucou', '1234', 'disconnected'),
+(5, 2, 'da', '1234', 'disconnected'),
+(6, 2, 'aeae', '1234', 'disconnected'),
+(8, 2, 'efbz', '1234', 'disconnected'),
+(9, 2, 'yuubgdzq', '1234', 'disconnected');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
