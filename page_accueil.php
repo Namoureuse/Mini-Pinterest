@@ -4,6 +4,18 @@
   $db=getDB();
   $repertoire="data/";
 
+  $logged = "Connexion";
+
+  var_dump($_SESSION["logged"]);
+
+  if(isset($_SESSION["logged"])){
+      $logged = $_SESSION["logged"];
+  }else{
+      session_unset();
+      //header('Location: connexion.php');
+  }
+
+
   $queryPhotosWhere = (isset($_GET['cat']) && $_GET['cat'] != "")
     ? " WHERE catId = ".$_GET['cat']
     : "";
@@ -23,12 +35,10 @@
       <div class="div_gris">
         <?php echo count($photos); ?> photo(s) sélectionnées
         <div class="pos_right">
-            <a href='connexion.php'> Connexion </a>
+            <a href='connexion.php'> <?php echo $logged ?> </a>
             <a href='inscription.php'> Inscription </a>
         </div>
       </div>
-
-
 
       <div>
         <form action="page_accueil.php" method="get">
