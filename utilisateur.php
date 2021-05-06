@@ -88,4 +88,11 @@ function getUserFromSession($db, $id)
 	return mysqli_fetch_assoc($result);
 }
 
+function addPicture($db, $nomFich, $description, $catId, $usrId)
+{
+	$query = "INSERT INTO photo (nomFich, description, catId, usrId) VALUES ('". $nomFich ."', '". $description ."', '". $catId . "', '". $usrId . "');";
+	executeUpdate($db, $query) ;
+	//move_uploaded_file($file, './data/' . basename($nomFich));
+}
+
 ?>

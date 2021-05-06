@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : jeu. 06 mai 2021 à 17:45
+-- Généré le : jeu. 06 mai 2021 à 19:42
 -- Version du serveur :  5.7.31
 -- Version de PHP : 7.3.21
 
@@ -69,23 +69,30 @@ CREATE TABLE IF NOT EXISTS `photo` (
   `nomFich` varchar(250) DEFAULT NULL,
   `description` varchar(250) DEFAULT NULL,
   `catId` int(11) DEFAULT NULL,
+  `usrId` int(11) DEFAULT NULL,
   PRIMARY KEY (`photoId`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `photo`
 --
 
-INSERT INTO `photo` (`photoId`, `nomFich`, `description`, `catId`) VALUES
-(1, './data/koro.png', 'Le personnage Koro Sensei de l\'anime Assassination Classroom', 1),
-(2, './data/tokyoghoul.jpg', 'Kaneki de l\'anime Tokyo Ghoul', 1),
-(3, './data/another.jpg', 'Mei Misaki et Koichi de l\'anime Another', 1),
-(4, './data/fleur.jpg', 'Image de fleurs jaunes', 2),
-(5, './data/chene.jpg', 'Image d\'un chêne', 2),
-(6, './data/amazonie.jpg', 'L\'Amazonie vue du ciel', 2),
-(7, './data/nebuleuse.jpg', 'Photo d\'une nébuleuse planétaire', 3),
-(8, './data/supernovae.jpg', 'Photo de l\'explosion d\'une supernova', 3),
-(9, './data/trounoir.jpg', 'Photo d\'un trou noir', 3);
+INSERT INTO `photo` (`photoId`, `nomFich`, `description`, `catId`, `usrId`) VALUES
+(1, './data/koro.png', 'Le personnage Koro Sensei de l\'anime Assassination Classroom', 1, NULL),
+(2, './data/tokyoghoul.jpg', 'Kaneki de l\'anime Tokyo Ghoul', 1, NULL),
+(3, './data/another.jpg', 'Mei Misaki et Koichi de l\'anime Another', 1, NULL),
+(4, './data/fleur.jpg', 'Image de fleurs jaunes', 2, NULL),
+(5, './data/chene.jpg', 'Image d\'un chêne', 2, NULL),
+(6, './data/amazonie.jpg', 'L\'Amazonie vue du ciel', 2, NULL),
+(7, './data/nebuleuse.jpg', 'Photo d\'une nébuleuse planétaire', 3, NULL),
+(8, './data/supernovae.jpg', 'Photo de l\'explosion d\'une supernova', 3, NULL),
+(9, './data/trounoir.jpg', 'Photo d\'un trou noir', 3, NULL),
+(10, 'Map 3.png', 'zqrqz', 3, 2),
+(11, 'cerclesnow.png', 'Photo', 2, 2),
+(12, 'neige.png', 'neige', 2, 2),
+(13, 'neige.png', 'neige', 2, 2),
+(14, 'cerclesnow.png', 'jsaisoka', 1, 2),
+(15, 'neige.png', 'jsp', 1, 2);
 
 -- --------------------------------------------------------
 
@@ -111,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
 
 INSERT INTO `utilisateur` (`id`, `roleId`, `pseudo`, `mdp`, `etat`, `connectedOn`) VALUES
 (1, 0, 'p1905392', '', 'disconnected', NULL),
-(2, 2, 'sonia', '1234', 'connected', '2021-05-06 17:38:38'),
+(2, 2, 'sonia', '1234', 'connected', '2021-05-06 18:06:27'),
 (4, 2, 'coucou', '1234', 'disconnected', NULL),
 (5, 2, 'da', '1234', 'disconnected', NULL),
 (6, 2, 'aeae', '1234', 'disconnected', NULL),
