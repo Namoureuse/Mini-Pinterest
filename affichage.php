@@ -1,11 +1,25 @@
 <?php 
 	session_start();
 	require_once ('bd.php');
+	require_once('utilisateur.php');
 
 	$db=getDB();
 	$repertoire="data/";
 
 	$photoID=$_GET['photoId'];
+
+	  $isConnected = isConnected();
+
+	  if ($isConnected){
+	    $user = getUserFromSession($db, $_SESSION['userId']);
+	  } else {
+	    $user = null;
+	  }
+	  if(!is_null($user)){
+	    $connectionTime = connectionTime($user['connectedOn']);
+	  } else {
+	    $connectionTime = null;
+	  }
 ?>
 
 <!doctype html>
@@ -17,6 +31,12 @@
 	</head>
 
 	<body>
+		<div>
+	        <?php if($isConnected){
+	            echo "Utilisateur : " .  $user['pseudo'] . "</br>Connecté depuis : " . $connectionTime;
+	          }
+	        ?> 
+      	</div>
 		<?php
 		    if(isset($_GET['photoId']) && $_GET['photoId'] != "") {
 		      $queryPhoto = executeQuery($db, "SELECT * FROM photo WHERE photoId =".$_GET['photoId']);
@@ -40,7 +60,7 @@
 
 		<div>
 			<?php
-				echo "<img src='" . $photoName . "' class = 'photo_detail'/>";
+				echo "<img src='" . $repertoire . $photoName . "' class = 'photo_detail'/>";
 			?>
 
 			<table class="tab">

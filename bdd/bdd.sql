@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : jeu. 06 mai 2021 à 19:42
+-- Généré le : jeu. 06 mai 2021 à 22:00
 -- Version du serveur :  5.7.31
 -- Version de PHP : 7.3.21
 
@@ -71,28 +71,22 @@ CREATE TABLE IF NOT EXISTS `photo` (
   `catId` int(11) DEFAULT NULL,
   `usrId` int(11) DEFAULT NULL,
   PRIMARY KEY (`photoId`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `photo`
 --
 
 INSERT INTO `photo` (`photoId`, `nomFich`, `description`, `catId`, `usrId`) VALUES
-(1, './data/koro.png', 'Le personnage Koro Sensei de l\'anime Assassination Classroom', 1, NULL),
-(2, './data/tokyoghoul.jpg', 'Kaneki de l\'anime Tokyo Ghoul', 1, NULL),
-(3, './data/another.jpg', 'Mei Misaki et Koichi de l\'anime Another', 1, NULL),
-(4, './data/fleur.jpg', 'Image de fleurs jaunes', 2, NULL),
-(5, './data/chene.jpg', 'Image d\'un chêne', 2, NULL),
-(6, './data/amazonie.jpg', 'L\'Amazonie vue du ciel', 2, NULL),
-(7, './data/nebuleuse.jpg', 'Photo d\'une nébuleuse planétaire', 3, NULL),
-(8, './data/supernovae.jpg', 'Photo de l\'explosion d\'une supernova', 3, NULL),
-(9, './data/trounoir.jpg', 'Photo d\'un trou noir', 3, NULL),
-(10, 'Map 3.png', 'zqrqz', 3, 2),
-(11, 'cerclesnow.png', 'Photo', 2, 2),
-(12, 'neige.png', 'neige', 2, 2),
-(13, 'neige.png', 'neige', 2, 2),
-(14, 'cerclesnow.png', 'jsaisoka', 1, 2),
-(15, 'neige.png', 'jsp', 1, 2);
+(1, 'koro.png', 'Le personnage Koro Sensei de l\'anime Assassination Classroom', 1, NULL),
+(2, 'tokyoghoul.jpg', 'Kaneki de l\'anime Tokyo Ghoul', 1, NULL),
+(3, 'another.jpg', 'Mei Misaki et Koichi de l\'anime Another', 1, NULL),
+(4, 'fleur.jpg', 'Image de fleurs jaunes', 2, NULL),
+(5, 'chene.jpg', 'Image d\'un chêne', 2, NULL),
+(6, 'amazonie.jpg', 'L\'Amazonie vue du ciel', 2, NULL),
+(7, 'nebuleuse.jpg', 'Photo d\'une nébuleuse planétaire', 3, NULL),
+(8, 'supernovae.jpg', 'Photo de l\'explosion d\'une supernova', 3, NULL),
+(9, 'trounoir.jpg', 'Photo d\'un trou noir', 3, NULL);
 
 -- --------------------------------------------------------
 

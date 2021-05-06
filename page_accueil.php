@@ -50,8 +50,15 @@
                     
                   }
                 ?> 
-            </a>
             <a href='inscription.php'> Inscription </a>
+        </div>
+      </div>
+      <div>
+        <div class="pos_right">
+            <?php if($isConnected){
+                echo '<a href="ajouter_photo.php">Ajouter une photo</a>' . " ";   
+              }
+            ?> 
         </div>
       </div>
 
@@ -102,7 +109,7 @@
       <?php
 
         foreach ($photos as $photo) {
-            echo '<a href="affichage.php?photoId=' . $photo['photoId'] . '"><img src="' . $photo['nomFich'] . '" class = "photo" alt="'. $photo['description'] .'"/></a>';
+            echo '<a href="affichage.php?photoId=' . $photo['photoId'] . '"><img src="' . $repertoire . $photo['nomFich'] . '" class = "photo" alt="'. $photo['description'] .'"/></a>';
         }
       ?>
     </div>

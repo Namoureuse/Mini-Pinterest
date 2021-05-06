@@ -2,6 +2,7 @@
 	session_start();
  	require_once('bd.php');
  	require_once('utilisateur.php');
+ 	//require_once('upload_picture.php');
  	$db=getDB();
 
  	$isConnected = isConnected();
@@ -19,12 +20,10 @@
 
 	if (isset($_POST['valider'])) {
 		$error = false;
-   		$fichier = $_POST["fichier"];
-   		//$file = $_FILES['fichier'];
+		$file = $_FILES['file'];
+   		
         $description = $_POST["description"];
         $cat = $_POST["cat"];
-
-        //var_dump($fichier, $file);
 
        	if (empty($description)){
 	      $wrongdescription = "Description vide.";
@@ -40,8 +39,16 @@
 	          $description = tests($description);
 	          $wrongdescription = "";
 	    }
+	    /*if ($file['size']>100000) {//100ko
+	 	  $wrongsize = "La taille du fichier est supérieure à 100 ko !";
+	      $error = true;   	
+	    } else {
+	          $file = tests($file['size']);
+	          $wrongsize = "";
+	    }*/
+	    /*if ($file['type'] != "image/png" || $file['type'] != "image/jpg" || $file['type'] != "image/jpeg" || $file['type'] != "image/gif")*/
 	    if(!$error){
-	    	addPicture($db, $fichier, $description, $cat, $_SESSION['userId']);
+	    	addPicture($db, $file, $description, $cat, $_SESSION['userId']);
 	    	//header('Location:affichage.php?photoId.php');
 	        //exit();
 	    }
@@ -65,15 +72,16 @@
 	            echo "Utilisateur : " .  $user['pseudo'] . "</br>Connecté depuis : " . $connectionTime;
 	          }
 	        ?> 
+	        <p><a href="page_accueil.php">Page d'accueil</a></p>
      	</div>
 		<h1>
 			Quelle photo?
 		</h1>
-		<form action="ajouter_photo.php" method="post">
+		<form action="ajouter_photo.php" method="post" enctype="multipart/form-data">
 			<div>
 				<table>
 					<tr><td>Choisir le fichier:</td></tr>
-					<tr><td><input type="file" name="fichier" accept=".png, .jpg, .jpeg, .gif"> </td></tr>
+					<tr><td><input type="file" name="file" accept=".png, .jpg, .jpeg, .gif"> </td></tr>
 					<tr><td>Décrire la photo une en phrase:</td></tr>
 					<tr><td><textarea name="description" id="description"></textarea></td></tr>
 					<tr><td>Choisir une catégorie:</td></tr>
