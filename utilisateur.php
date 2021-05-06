@@ -90,16 +90,18 @@ function getUserFromSession($db, $id)
 
 function addPicture($db, $file, $description, $catId, $usrId)
 {
-	//$queryPhotoId = executeQuery($db, "SELECT MAX(photoId) FROM photo");
-	//$photoId = $queryPhotoId->fetch_all(MYSQLI_ASSOC);
+	$queryPhotoId = executeQuery($db, "SELECT * FROM photo");
+	$photoId = $queryPhotoId->fetch_all(MYSQLI_ASSOC);
+	$maxId = max($photoId);
+	$maxId = $maxId['photoId'] + 1;
 
-	//var_dump($photoId);
-
-	//$fileName = $photoId;
-	$fileName ="DSC". $file['name'];
+	$fileName ="DSC-". $maxId;
 
 	$query = "INSERT INTO photo (nomFich, description, catId, usrId) VALUES ('". $fileName ."', '". $description ."', '". $catId . "', '". $usrId . "');";
 	executeUpdate($db, $query) ;
 	move_uploaded_file($file['tmp_name'], './data/' . basename($fileName));
+
+
+	header('Location:affichage.php?photoId="' . $maxId.'"');
 }
 ?>
