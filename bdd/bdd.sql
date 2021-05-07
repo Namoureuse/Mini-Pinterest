@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `p1905223`
+-- Base de données : `root`
 --
 
 -- --------------------------------------------------------
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
 --
 
 INSERT INTO `utilisateur` (`id`, `roleId`, `pseudo`, `mdp`, `etat`, `connectedOn`) VALUES
-(2, 2, 'sonia', '1234', 'connected', '2021-05-07 21:33:15'),
+(2, 2, 'sonia', '1234', 'disconnected', '2021-05-07 21:33:15'),
 (12, 2, 'ahmed', '1234', 'disconnected', NULL),
 (11, 1, 'admin2', '1234', 'disconnected', '2021-05-07 19:54:36'),
 (10, 1, 'newadmin', '1234', 'disconnected', '2021-05-07 20:15:23');
