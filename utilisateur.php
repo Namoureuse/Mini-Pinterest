@@ -88,22 +88,74 @@ function getUserFromSession($db, $id)
 	return mysqli_fetch_assoc($result);
 }
 
+
+//ajouter_photo.php
 function addPicture($db, $file, $description, $catId, $usrId)
 {
 	$queryPhotoId = executeQuery($db, "SELECT * FROM photo");
 	$photoId = $queryPhotoId->fetch_all(MYSQLI_ASSOC);
+	$fileType = pathinfo($file['name'], PATHINFO_EXTENSION);
+
 	$maxId = max($photoId);
 	$maxId = $maxId['photoId'] + 1;
 
-	$fileName ="DSC". $maxId;
+	$fileName ="DSC". $maxId. "." . $fileType;
 
 	$query = "INSERT INTO photo (nomFich, description, catId, usrId) VALUES ('". $fileName ."', '". $description ."', '". $catId . "', '". $usrId . "');";
 	executeUpdate($db, $query) ;
 	move_uploaded_file($file['tmp_name'], './data/' . basename($fileName));
 
+	return $maxId;
+}
 
-	/*header('Location:affichage.php?photoId="' . $maxId.'"');
-	exit();*/
+function checkFile($file)
+{
+	$errorMsg = "";
+	$error = false;
+	$fileType = pathinfo($file['name'], PATHINFO_EXTENSION);
+	$allowedFileTypes = array("gif", "jpg", "jpeg", "png");
+	$fileSize = $file['size'];
+
+    if ($fileSize>100000) {//100ko
+ 	  $errorMsg = "La taille du fichier est supérieure à 100ko !";
+      $error = true;   	
+    } 
+	if (!$error && !in_array($fileType, $allowedFileTypes)) {
+		$imageSize = getimagesize($file['tmp_name']);
+		if($imageSize[2] != 1 && $imageSize[2] != 2 && $imageSize[2] != 3){ //2 correspond à l'extension dans le tableau renvoyé par getimagesize : 1 = GIF, 2 = JPG, 3 = PNG		
+			$errorMsg = "Le fichier doit avoir pour extension .jpg, .jpeg, .png, ou .gif !";
+	     	$error = true;	
+		}
+	} 
+	return $errorMsg;
+}
+
+//modif_photo.php
+function modifyPicture($db, $file, $photo, $description, $catId)
+{
+	if (!is_null($photo)) {
+		if($file['error'] != UPLOAD_ERR_NO_FILE && $file['size'] != 0) {
+			$filepath = __DIR__."/data/" . $photo['nomFich'];
+			unlink ($filepath);
+			if(!file_exists($filepath)){ //check si on a bien remove le fichier
+				$fileType = pathinfo($file['name'], PATHINFO_EXTENSION);
+				$fileName = "DSC" . $photo['photoId'] . "." . $fileType;
+				$filepath = __DIR__."/data/" . $fileName;
+				
+				move_uploaded_file($file['tmp_name'], './data/' . basename($filepath));
+				if (file_exists($filepath)) {
+					$query = "UPDATE photo SET nomFich ='" . $fileName . "', description ='" . $description . "', catId ='" . $catId . "' WHERE photoId = '". $photo['photoId'] ."';";
+					executeUpdate($db, $query);	
+				}
+			}		
+		} else {
+			$query = "UPDATE photo SET description ='" . $description . "', catId ='" . $catId . "' WHERE photoId = '". $photo['photoId'] ."';";
+			executeUpdate($db, $query);	
+		}
+	}
+
+	/*$query = "UPDATE photo SET nomFich = '" . $file ."', description ='" . $description . "', catId ='" . $cat . "' WHERE photoId = '". $photoId ."';";
+	executeUpdate($db, $query);*/
 }
 
 function selectAllPicturesFromUser($db, $usrId)
@@ -120,4 +172,33 @@ function getRoleFromId($db, $usrId)
 	$result = $query->fetch_assoc();
 	return $result['roleId'];
 }
+
+//compte_admin.php
+function getPseudoFromId($db, $usrId)
+{
+	  $queryPseudo = executeQuery($db, "SELECT pseudo from utilisateur WHERE id='" . $usrId."';");
+      $result = $queryPseudo->fetch_assoc();
+      return $result['pseudo'];
+}
+
+//compte_admin.php
+function getCategorieFromCatId($db, $catId)
+{
+	  $queryCategorie = executeQuery($db, "SELECT nomCat from categorie WHERE catId='" . $catId."';");
+      $result = $queryCategorie->fetch_assoc();
+      return $result['nomCat'];
+}
+
+//compte_utilisateur.php
+function removePhoto($db, $photo)
+{
+	$filepath = __DIR__."/data/" . $photo['nomFich'];
+	unlink ($filepath);
+
+	if(!file_exists($filepath)) {
+		$query = "DELETE FROM photo WHERE photoId = '" . $photo['photoId'] . "';";
+		executeUpdate($db, $query);
+	}
+}
+
 ?>

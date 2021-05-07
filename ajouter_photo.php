@@ -21,9 +21,11 @@
 	if (isset($_POST['valider'])) {
 		$error = false;
 		$file = $_FILES['file'];
-   		
         $description = $_POST["description"];
         $cat = $_POST["cat"];
+        $fileType = pathinfo($file['name'], PATHINFO_EXTENSION);
+	    $allowedFileTypes = array("gif", "jpg", "jpeg", "png");
+	    $fileSize = $file['size'];
 
        	if (empty($description)){
 	      $wrongdescription = "Description vide.";
@@ -40,17 +42,20 @@
 	          $wrongcat = "";
 	    }
 
-	    var_dump($file['size']);
-	    if ($file['size']>"100 000") {//100ko
-	 	  $wrongsize = "La taille du fichier est supérieure à 100 ko !";
-	      $error = true;   	
-	    } else {
-	          $file = tests($file['size']);
-	          $wrongsize = "";
-	    }
-	    /*if ($file['type'] != "image/png" || $file['type'] != "image/jpg" || $file['type'] != "image/jpeg" || $file['type'] != "image/gif")*/
+	    if($file['error'] == UPLOAD_ERR_NO_FILE && $file['size'] == 0){
+		    $wrongFile = "Veuillez sélectionner une image.";
+		    $error = true;
+		} else {
+			$wrongFile = checkFile($file);
+		    if($wrongFile != ""){
+		    	$error = true;
+		    }
+		}
+
 	    if(!$error){
-	    	addPicture($db, $file, $description, $cat, $_SESSION['userId']);
+	    	$maxId = addPicture($db, $file, $description, $cat, $_SESSION['userId']);
+	    	header('Location:affichage.php?photoId="' . $maxId.'"');
+			exit();
 	    }
 	}
 
@@ -83,8 +88,8 @@
 					<tr><td>Choisir le fichier:</td></tr>
 					<tr><td><input type="file" name="file" accept=".png, .jpg, .jpeg, .gif">                        
 							<?php
-	                            if(isset($wrongsize) && $wrongsize != ""){
-	                                echo '<p class="error">' . $wrongsize . '<p>';
+	                            if(isset($wrongFile) && $wrongFile != ""){
+	                                echo '<p class="error">' . $wrongFile . '<p>';
                             	}
                         	?>
                     	</td>

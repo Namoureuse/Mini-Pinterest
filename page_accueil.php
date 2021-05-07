@@ -54,12 +54,11 @@
         <div class="pos_right">
                 <?php if(!$isConnected){
                     echo '<a href="connexion.php">Connexion</a>' . " ";
+                    echo '<a href="inscription.php">Inscription</a>' . " ";
                   } else {
                     echo '<a href="deconnexion.php">Déconnexion</a>' . " ";
-                    
                   }
                 ?> 
-            <a href='inscription.php'> Inscription </a>
         </div>
       </div>
       <div>
