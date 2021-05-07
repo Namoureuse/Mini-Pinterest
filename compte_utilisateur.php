@@ -110,9 +110,6 @@
               echo '<img src="' . $repertoire . $photo['nomFich'] . '" class = "photo" alt="'. $photo['description'] .'"/>';
             echo "</td>";
             echo '<td class="bordure">';
-              echo getPseudoFromId($db, $photo['usrId']);
-            echo "</td>";
-            echo '<td class="bordure">';
               echo getCategorieFromCatId($db, $photo['catId']);
             echo "</td>";
             echo '<td class="bordure">';
