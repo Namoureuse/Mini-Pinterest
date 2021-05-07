@@ -42,3 +42,15 @@ td.bordure
 {
 	float: right;
 }
+
+.error
+{
+	color: red;
+}
+
+.account
+{
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}

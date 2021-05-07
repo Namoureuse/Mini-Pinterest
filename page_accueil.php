@@ -40,6 +40,15 @@
           }
         ?> 
       </div>
+      <div class="account">
+        <?php if($isConnected && getRoleFromId($db, $_SESSION['userId']) == 1){ //administrateur
+            echo '<a href="compte_admin.php">Mon compte</a>' . " ";
+          }
+          if($isConnected && getRoleFromId($db, $_SESSION['userId']) == 2){ //utilisateur
+            echo '<a href="compte_utilisateur.php">Mon compte</a>' . " ";
+          }
+        ?> 
+      </div>
       <div class="div_gris">
         <?php echo count($photos); ?> photo(s) sélectionnées
         <div class="pos_right">

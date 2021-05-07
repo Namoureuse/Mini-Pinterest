@@ -36,21 +36,21 @@
 	      $wrongcat = "Il faut choisir une catégorie !";
 	      $error = true;
 	    } else {
-	          $description = tests($description);
-	          $wrongdescription = "";
+	          $cat = tests($cat);
+	          $wrongcat = "";
 	    }
-	    /*if ($file['size']>100000) {//100ko
+
+	    var_dump($file['size']);
+	    if ($file['size']>"100 000") {//100ko
 	 	  $wrongsize = "La taille du fichier est supérieure à 100 ko !";
 	      $error = true;   	
 	    } else {
 	          $file = tests($file['size']);
 	          $wrongsize = "";
-	    }*/
+	    }
 	    /*if ($file['type'] != "image/png" || $file['type'] != "image/jpg" || $file['type'] != "image/jpeg" || $file['type'] != "image/gif")*/
 	    if(!$error){
 	    	addPicture($db, $file, $description, $cat, $_SESSION['userId']);
-	    	//header('Location:affichage.php?photoId.php');
-	        //exit();
 	    }
 	}
 
@@ -81,19 +81,39 @@
 			<div>
 				<table>
 					<tr><td>Choisir le fichier:</td></tr>
-					<tr><td><input type="file" name="file" accept=".png, .jpg, .jpeg, .gif"> </td></tr>
+					<tr><td><input type="file" name="file" accept=".png, .jpg, .jpeg, .gif">                        
+							<?php
+	                            if(isset($wrongsize) && $wrongsize != ""){
+	                                echo '<p class="error">' . $wrongsize . '<p>';
+                            	}
+                        	?>
+                    	</td>
+                    </tr>
 					<tr><td>Décrire la photo une en phrase:</td></tr>
-					<tr><td><textarea name="description" id="description"></textarea></td></tr>
+					<tr><td><textarea name="description" id="description"></textarea>
+							<?php
+	                            if(isset($wrongdescription) && $wrongdescription != ""){
+	                                echo '<p class="error">' . $wrongdescription . '<p>';
+                            	}
+                        	?>
+						</td>
+					</tr>
 					<tr><td>Choisir une catégorie:</td></tr>
 					<tr><td><select name="cat" >
 	                  	<?php
-	                      foreach ($categories as $categorie) {
-	                          $selected = (isset($_POST['cat']) && $_POST['cat'] == $categorie['catId'])
-	                            ? " selected"
-	                            : "";
-	                          echo "<option value=".$categorie['catId'].$selected.">".$categorie['nomCat']."</option>";
-	                    }
-	                  ?></td></tr>
+	                      	foreach ($categories as $categorie) {
+	                          	$selected = (isset($_POST['cat']) && $_POST['cat'] == $categorie['catId'])
+	                            	? " selected"
+	                            	: "";
+	                         	 echo "<option value=".$categorie['catId'].$selected.">".$categorie['nomCat']."</option>";
+	                    	}	
+	                    ?>
+						<?php
+	                        if(isset($wrongcat) && $wrongcat != ""){
+	                            echo '<p class="error">' . $wrongcat . '<p>';
+	                    	}
+	                	?>
+	              	</td></tr>
 				</table>
 				<div>
 					<input class="button" type="submit" name="valider" value ="Valider">

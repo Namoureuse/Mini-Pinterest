@@ -94,7 +94,7 @@
                     </select>
                         <?php
                             if(isset($wrongrole) && $wrongrole != ""){
-                                echo $wrongrole;
+                                echo '<p class="error">' . $wrongrole . '<p>';
                             }
                         ?>
                 
@@ -108,7 +108,7 @@
                     <div class="col-1">
                         <?php
                             if(isset($wrongpseudo) && $wrongpseudo != ""){
-                                echo $wrongpseudo;
+                                echo '<p class="error">' . $wrongpseudo . '<p>';
                             }
                         ?>
                     </div>
@@ -122,7 +122,7 @@
                         <div class="col-10">
                             <?php
                                 if(isset($wrongpwd) && $wrongpwd != ""){
-                                    echo $wrongpwd;
+                                    echo '<p class="error">' . $wrongpwd . '<p>';
                                 }
                             ?>
                         </div>
@@ -136,7 +136,7 @@
                             <div class="col-10">
                                 <?php
                                     if(isset($wrongpwd2) && $wrongpwd2){
-                                        echo $wrongpwd2;
+                                        echo '<p class="error">' . $wrongpwd2 . '<p>';
                                     }
                                 ?>
                             </div>
@@ -155,8 +155,6 @@
 </div>
 
 <?php
-
-
 /*Cette fonction doit être définie hors d'une condition (if/else), donc on la définie avant de l'utiliser dans une boucle*/
 function tests($donnees){
     $donnees = trim($donnees); //trim supprime les espaces (ou d'autres caractères) en début et fin de chaîne

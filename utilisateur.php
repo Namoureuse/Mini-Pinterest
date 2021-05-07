@@ -95,13 +95,29 @@ function addPicture($db, $file, $description, $catId, $usrId)
 	$maxId = max($photoId);
 	$maxId = $maxId['photoId'] + 1;
 
-	$fileName ="DSC-". $maxId;
+	$fileName ="DSC". $maxId;
 
 	$query = "INSERT INTO photo (nomFich, description, catId, usrId) VALUES ('". $fileName ."', '". $description ."', '". $catId . "', '". $usrId . "');";
 	executeUpdate($db, $query) ;
 	move_uploaded_file($file['tmp_name'], './data/' . basename($fileName));
 
 
-	header('Location:affichage.php?photoId="' . $maxId.'"');
+	/*header('Location:affichage.php?photoId="' . $maxId.'"');
+	exit();*/
+}
+
+function selectAllPicturesFromUser($db, $usrId)
+{
+	$query = "SELECT * FROM photos WHERE usrId = '". $usrId ."';";
+	$result = executeQuery($db, $query);
+	return mysqli_fetch_assoc($result);
+}
+
+/*Fonction qui cherche dans la table le rôle selon un id passé en paramètre : 1: utilisateur, 2: administrateur et retourne cet id*/
+function getRoleFromId($db, $usrId)
+{
+	$query = executeQuery($db, "SELECT roleId FROM utilisateur WHERE id = '". $usrId ."';");
+	$result = $query->fetch_assoc();
+	return $result['roleId'];
 }
 ?>

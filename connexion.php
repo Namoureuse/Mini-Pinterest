@@ -5,6 +5,17 @@
 	$db = getDB();
  	$stateMsg = "";
  	$isConnected = isConnected();
+
+	if ($isConnected){
+	  $user = getUserFromSession($db, $_SESSION['userId']);
+	} else {
+	  $user = null;
+	}
+	if(!is_null($user)){
+	  $connectionTime = connectionTime($user['connectedOn']);
+	} else {
+	  $connectionTime = null;
+	}
    
    	if (isset($_POST['valider'])) {
    		$error = false;
@@ -56,6 +67,12 @@
 	  <link rel="stylesheet" href="style.css">
 	</head>
 	<body>
+		<div>
+	        <?php if($isConnected){
+	            echo "Utilisateur : " .  $user['pseudo'] . "</br>Connecté depuis : " . $connectionTime;
+	          }
+	        ?> 
+     	</div>
 		<div class="loginBanner">
 			<h1>Connexion pour modifier le catalogue</h1>
 				<?php if(!$isConnected){ ?>
@@ -65,14 +82,15 @@
 	                            <small class="col-10">
 	                                <?php
 	                                if(isset($wrongpseudo) && $wrongpseudo){
-	                                    echo $wrongpseudo;}
+	                                   echo '<p class="error">' . $wrongpseudo . '<p>';
+	                                }
 	                                ?>
 	                            </small></td>
 			               		<td class="loginInfo">Mot de passe</td><td><input type="password" name="motdepasse">
 	                               <small class="col-10">
 	                               <?php
 	                                if(isset($wrongpwd) && $wrongpwd){
-	                                    echo $wrongpwd;
+	                                    echo '<p class="error">' . $wrongpwd . '<p>';
 	                                }
 	                                ?>
 	                            </small></td>
