@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : jeu. 06 mai 2021 à 22:00
+-- Généré le : ven. 07 mai 2021 à 21:48
 -- Version du serveur :  5.7.31
 -- Version de PHP : 7.3.21
 
@@ -20,20 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `p1905223`
 --
-
--- --------------------------------------------------------
-
---
--- Structure de la table `administrateur`
---
-
-DROP TABLE IF EXISTS `administrateur`;
-CREATE TABLE IF NOT EXISTS `administrateur` (
-  `adId` int(11) NOT NULL AUTO_INCREMENT,
-  `adpseudo` varchar(255) NOT NULL,
-  `adpwd` varchar(255) NOT NULL,
-  PRIMARY KEY (`adId`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -70,23 +56,19 @@ CREATE TABLE IF NOT EXISTS `photo` (
   `description` varchar(250) DEFAULT NULL,
   `catId` int(11) DEFAULT NULL,
   `usrId` int(11) DEFAULT NULL,
+  `state` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`photoId`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `photo`
 --
 
-INSERT INTO `photo` (`photoId`, `nomFich`, `description`, `catId`, `usrId`) VALUES
-(1, 'koro.png', 'Le personnage Koro Sensei de l\'anime Assassination Classroom', 1, NULL),
-(2, 'tokyoghoul.jpg', 'Kaneki de l\'anime Tokyo Ghoul', 1, NULL),
-(3, 'another.jpg', 'Mei Misaki et Koichi de l\'anime Another', 1, NULL),
-(4, 'fleur.jpg', 'Image de fleurs jaunes', 2, NULL),
-(5, 'chene.jpg', 'Image d\'un chêne', 2, NULL),
-(6, 'amazonie.jpg', 'L\'Amazonie vue du ciel', 2, NULL),
-(7, 'nebuleuse.jpg', 'Photo d\'une nébuleuse planétaire', 3, NULL),
-(8, 'supernovae.jpg', 'Photo de l\'explosion d\'une supernova', 3, NULL),
-(9, 'trounoir.jpg', 'Photo d\'un trou noir', 3, NULL);
+INSERT INTO `photo` (`photoId`, `nomFich`, `description`, `catId`, `usrId`, `state`) VALUES
+(19, 'DSC1.png', 'Texture de neige', 2, 2, 1),
+(20, 'DSC20.png', 'Koro Sensei', 1, 2, 1),
+(21, 'DSC21.png', 'Une map de mini golf.', 2, 2, 1),
+(22, 'DSC22.png', 'Une autre map de golf.', 3, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -104,20 +86,17 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   `connectedOn` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `pseudo` (`pseudo`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `utilisateur`
 --
 
 INSERT INTO `utilisateur` (`id`, `roleId`, `pseudo`, `mdp`, `etat`, `connectedOn`) VALUES
-(1, 0, 'p1905392', '', 'disconnected', NULL),
-(2, 2, 'sonia', '1234', 'connected', '2021-05-06 18:06:27'),
-(4, 2, 'coucou', '1234', 'disconnected', NULL),
-(5, 2, 'da', '1234', 'disconnected', NULL),
-(6, 2, 'aeae', '1234', 'disconnected', NULL),
-(8, 2, 'efbz', '1234', 'disconnected', NULL),
-(9, 2, 'yuubgdzq', '1234', 'disconnected', NULL);
+(2, 2, 'sonia', '1234', 'connected', '2021-05-07 21:33:15'),
+(12, 2, 'ahmed', '1234', 'disconnected', NULL),
+(11, 1, 'admin2', '1234', 'disconnected', '2021-05-07 19:54:36'),
+(10, 1, 'newadmin', '1234', 'disconnected', '2021-05-07 20:15:23');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

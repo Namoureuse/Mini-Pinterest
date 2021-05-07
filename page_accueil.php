@@ -1,7 +1,7 @@
 <?php
   session_start();
   require_once('bd.php');
-  require_once('utilisateur.php');
+  require_once('fonctions.php');
   $db=getDB();
   $repertoire="data/";
 
@@ -18,9 +18,9 @@
     $connectionTime = null;
   }
 
-  $queryPhotosWhere = (isset($_GET['cat']) && $_GET['cat'] != "all")
-    ? " WHERE catId = ".$_GET['cat']
-    : "";
+  $queryPhotosWhere = (isset($_GET['cat']) && $_GET['cat'] != "all") //si la catégorie est toute les photos("all") on peut directement prendre tous les tuples de la table et affiché ce qui nous intéresse
+    ? " WHERE catId = ".$_GET['cat'] . " AND state = 1"
+    : " WHERE state = 1";
   $queryPhotos = executeQuery($db, "SELECT * FROM photo".$queryPhotosWhere);
   $photos = $queryPhotos->fetch_all(MYSQLI_ASSOC);
 ?>

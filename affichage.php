@@ -1,14 +1,14 @@
 <?php 
 	session_start();
 	require_once ('bd.php');
-	require_once('utilisateur.php');
+	require_once('fonctions.php');
 
 	$db=getDB();
 	$repertoire="data/";
 
 	$photoID=$_GET['photoId'];
 
-	  $isConnected = isConnected();
+	  $isConnected = isConnected(); //définis si l'utilisateur est connecté
 
 	  if ($isConnected){
 	    $user = getUserFromSession($db, $_SESSION['userId']);
@@ -38,7 +38,7 @@
 	        ?> 
       	</div>
 		<?php
-		    if(isset($_GET['photoId']) && $_GET['photoId'] != "") {
+		    if(isset($_GET['photoId']) && $_GET['photoId'] != "") { //On récupère les données qu'on a besoin d'afficher à l'aide de l'id de la photo (envoyé par la page d'accueil)
 		      $queryPhoto = executeQuery($db, "SELECT * FROM photo WHERE photoId =".$_GET['photoId']);
 		      $photo = $queryPhoto->fetch_assoc();
 		      $photoName = $photo['nomFich'];

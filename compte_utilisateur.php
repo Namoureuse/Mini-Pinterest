@@ -1,20 +1,19 @@
 <?php
 	session_start();
  	require_once('bd.php');
- 	require_once('utilisateur.php');
- 	//require_once('upload_picture.php');
+ 	require_once('fonctions.php');
  	$db=getDB();
  	$repertoire="data/";
 
- 	$isConnected = isConnected();
+ 	$isConnected = isConnected(); //Vérifie si on est connecté
 
 	if ($isConnected){
-	  $user = getUserFromSession($db, $_SESSION['userId']);
+	  $user = getUserFromSession($db, $_SESSION['userId']); //Fonction définie dans fonctions.php
 	} else {
 	  $user = null;
 	}
 	if(!is_null($user)){
-	  $connectionTime = connectionTime($user['connectedOn']);
+	  $connectionTime = connectionTime($user['connectedOn']); //Fonction définie dans fonctions.php
 	} else {
 	  $connectionTime = null;
 	}
@@ -27,6 +26,13 @@
 	  }
 	  $queryPhotos = executeQuery($db, "SELECT * FROM photo".$querySelectionWhere);
 	  $photos = $queryPhotos->fetch_all(MYSQLI_ASSOC);
+
+  if (isset($_POST['photoId'])){ // si on change la valeur d'affichage : cachée ou non
+      $status = $_POST["status"]; 
+      changePhotoStatus($db, $_POST['photoId'], $status); //Fonction changePhotoStatus définie dans fonctions.php
+      header('Location:compte_utilisateur.php');
+      exit();
+  }
 ?>
 
 <!doctype html>
@@ -98,10 +104,13 @@
         </tr>
       <?php
 
-        foreach ($photos as $photo) {
+        foreach ($photos as $photo) { //Affichage de chaque ligne de notre tableau 
           echo "<tr>";
             echo '<td class="bordure">';
               echo '<img src="' . $repertoire . $photo['nomFich'] . '" class = "photo" alt="'. $photo['description'] .'"/>';
+            echo "</td>";
+            echo '<td class="bordure">';
+              echo getPseudoFromId($db, $photo['usrId']);
             echo "</td>";
             echo '<td class="bordure">';
               echo getCategorieFromCatId($db, $photo['catId']);
@@ -117,9 +126,32 @@
               echo '<p><a href="suppr.php?photoId=' . $photo['photoId'] . '">Suppimer</a></p>';
             echo "</td>";
           echo "</tr>";
-        }
-      ?>
+          echo "<tr>";
+            echo '<td class="bordure">'; 
+            ?>
+              <form method="post" name="<?php echo $photo['photoId']; ?>">
+                    <select name="status" >
+                        <?php
+                          if ($photo['state'] == 0) { //si le state est à zéro la photo est cachée
+                        ?>
+                        <option value="1">Actif</option>
+                        <option value="0" selected="">Caché</option>
+                      <?php } else { ?>
+                        <option value="1" selected="">Actif</option>
+                        <option value="0">Caché</option>
+                      <?php } ?>
+                    </select> 
+                    <input type="hidden" name="photoId" value="<?php echo $photo['photoId']; ?>"> 
+                    <input type="submit" name="valider" value="Valider" class="button"/> 
+              </form>         
+            </td>
+          </tr>
+        
+        
+        <?php            
+
+          }
+        ?>
       </table>
     </div>
-  </body>
 </html>

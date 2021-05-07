@@ -1,13 +1,12 @@
 <?php
 	session_start();
  	require_once('bd.php');
- 	require_once('utilisateur.php');
- 	//require_once('upload_picture.php');
+ 	require_once('fonctions.php');
  	$db=getDB();
 
- 	$isConnected = isConnected();
+ 	$isConnected = isConnected(); //On regarde si on est connecté
 
-	if ($isConnected){
+	if ($isConnected){ //Si on est connecté on récupère les données de notre utilisateur
 	  $user = getUserFromSession($db, $_SESSION['userId']);
 	} else {
 	  $user = null;
@@ -27,14 +26,14 @@
 	    $allowedFileTypes = array("gif", "jpg", "jpeg", "png");
 	    $fileSize = $file['size'];
 
-       	if (empty($description)){
+       	if (empty($description)){ //Vérification description non nulle
 	      $wrongdescription = "Description vide.";
 	      $error = true;
 	    } else {
 	          $description = tests($description);
 	          $wrongdescription = "";
 	    }
-	    if (empty($cat)){
+	    if (empty($cat)){ //Vérification catégorie non nulle
 	      $wrongcat = "Il faut choisir une catégorie !";
 	      $error = true;
 	    } else {
@@ -42,18 +41,18 @@
 	          $wrongcat = "";
 	    }
 
-	    if($file['error'] == UPLOAD_ERR_NO_FILE && $file['size'] == 0){
+	    if($file['error'] == UPLOAD_ERR_NO_FILE && $file['size'] == 0){ //Vérification que la taille n'est pas égale à 0 => qu'il y ait un fichier
 		    $wrongFile = "Veuillez sélectionner une image.";
 		    $error = true;
 		} else {
-			$wrongFile = checkFile($file);
+			$wrongFile = checkFile($file); //Fonction checkfile définie dans fonctions.php, fais les vérifications sur le fichier
 		    if($wrongFile != ""){
 		    	$error = true;
 		    }
 		}
 
-	    if(!$error){
-	    	$maxId = addPicture($db, $file, $description, $cat, $_SESSION['userId']);
+	    if(!$error){ // Si nos tests d'erreur sont passés on peut envoyer le fichoer
+	    	$maxId = addPicture($db, $file, $description, $cat, $_SESSION['userId']); //Fonction addPicture définie dans fonctions.php
 	    	header('Location:affichage.php?photoId="' . $maxId.'"');
 			exit();
 	    }
@@ -88,7 +87,7 @@
 					<tr><td>Choisir le fichier:</td></tr>
 					<tr><td><input type="file" name="file" accept=".png, .jpg, .jpeg, .gif">                        
 							<?php
-	                            if(isset($wrongFile) && $wrongFile != ""){
+	                            if(isset($wrongFile) && $wrongFile != ""){ //Message d'erreur
 	                                echo '<p class="error">' . $wrongFile . '<p>';
                             	}
                         	?>
@@ -114,7 +113,7 @@
 	                    	}	
 	                    ?>
 						<?php
-	                        if(isset($wrongcat) && $wrongcat != ""){
+	                        if(isset($wrongcat) && $wrongcat != ""){ //Message d'erreur
 	                            echo '<p class="error">' . $wrongcat . '<p>';
 	                    	}
 	                	?>

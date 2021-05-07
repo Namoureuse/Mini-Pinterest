@@ -1,7 +1,7 @@
 <?php
 	session_start();
  	require_once('bd.php');
- 	require('utilisateur.php');
+ 	require('fonctions.php');
 	$db = getDB();
  	$stateMsg = "";
  	$isConnected = isConnected();
@@ -17,20 +17,20 @@
 	  $connectionTime = null;
 	}
    
-   	if (isset($_POST['valider'])) {
+   	if (isset($_POST['valider'])) { // Si on a appuyé pour se connecter
    		$error = false;
    		$user = null;
         $pseudo = $_POST["pseudo"];
         $pwd = $_POST["motdepasse"];
 
-	    if (empty($pseudo)){
+	    if (empty($pseudo)){ //check si pseudo vide
 	      $wrongpseudo = "Pseudo incorrect.";
 	      $error = true;
 	    } else {
 	          $pseudo = tests($pseudo);
 	          $wrongpseudo = "";
 	    }
-	    if (empty($pwd)) {
+	    if (empty($pwd)) { //check si password vide
 	          $wrongpwd = "Mot de passe incorrect.";
 	          $error = true;
 	    } else {
@@ -38,7 +38,7 @@
 	    }
 
 	    if(!$error){
-	    	$user = getUserFromConnection($db, $pseudo, $pwd);
+	    	$user = getUserFromConnection($db, $pseudo, $pwd); ////Fonction définie dans fonctions.php
 
 	    	if (!$user){
 	    		$error = true;
@@ -51,7 +51,7 @@
 	    }
 
 	    if(!$error && !is_null($user)) {
-	        setConnectedUtilisateur($db, $user["id"]);
+	        setConnectedUtilisateur($db, $user["id"]); //Fonction définie dans fonctions.php => change l'état de l'utilisateur en connecté
 	        $_SESSION["userId"] = $user["id"];
 	        header('Location:page_accueil.php');
 	        exit();
@@ -81,7 +81,7 @@
 			                   	<td class="loginInfo">Pseudo</td><td><input type="text" name="pseudo" id="pseudo" placeholder="Pseudo">
 	                            <small class="col-10">
 	                                <?php
-	                                if(isset($wrongpseudo) && $wrongpseudo){
+	                                if(isset($wrongpseudo) && $wrongpseudo){ //Message d'erreur ^pseudo
 	                                   echo '<p class="error">' . $wrongpseudo . '<p>';
 	                                }
 	                                ?>
@@ -89,7 +89,7 @@
 			               		<td class="loginInfo">Mot de passe</td><td><input type="password" name="motdepasse">
 	                               <small class="col-10">
 	                               <?php
-	                                if(isset($wrongpwd) && $wrongpwd){
+	                                if(isset($wrongpwd) && $wrongpwd){ //Message d'erreur password
 	                                    echo '<p class="error">' . $wrongpwd . '<p>';
 	                                }
 	                                ?>

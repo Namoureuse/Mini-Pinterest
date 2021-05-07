@@ -1,7 +1,7 @@
 <?php
     session_start();
     require_once('bd.php');
-    require_once('utilisateur.php');
+    require_once('fonctions.php');
     $db=getDB();
     $repertoire="data/";
 

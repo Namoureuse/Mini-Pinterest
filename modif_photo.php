@@ -1,7 +1,7 @@
 <?php
   session_start();
   require_once('bd.php');
-  require_once('utilisateur.php');
+  require_once('fonctions.php');
   $db=getDB();
   $repertoire="data/";
 
@@ -18,7 +18,7 @@
     $connectionTime = null;
   }
 
-    if(isset($_GET['photoId']) && $_GET['photoId'] != "") {
+    if(isset($_GET['photoId']) && $_GET['photoId'] != "") { //Récupère les informations nécessaires à l'affichage d'une photo
       $queryPhoto = executeQuery($db, "SELECT * FROM photo WHERE photoId =".$_GET['photoId']);
       $photo = $queryPhoto->fetch_assoc();
       $photoId = $photo['photoId'];
@@ -33,7 +33,7 @@
     }
 		
 
-	if (isset($_POST['valider'])) {
+	if (isset($_POST['valider'])) { //Si on envoir la modif (tous les champs n'ont pas à être remplis, on peut ne modifier qu'une seule donnée)
 		$error = false;
 		$file = $_FILES['file'];
         $description = $_POST["description"];
@@ -41,14 +41,14 @@
 
 
 	    if($file['error'] != UPLOAD_ERR_NO_FILE && $file['size'] != 0){
-			$wrongFile = checkFile($file);
-		    if($wrongFile != ""){
+			$wrongfile = checkFile($file);
+		    if($wrongfile != ""){
 		    	$error = true;
 		    }
 		}
 
 	    if(!$error){
-	    	modifyPicture($db, $file, $photo, $description, $cat);
+	    	modifyPicture($db, $file, $photo, $description, $cat); //Fonction définie dans fonctions.php, modifie le tuple dans la base de données
 	    	header('Location:modif_photo.php?photoId="' . $photo['photoId'].'"');
 			exit();
 	    }

@@ -1,7 +1,6 @@
 <?php
   require_once('bd.php');
-  require_once('utilisateur.php');
-  require_once('administrateur.php');
+  require_once('fonctions.php');
 ?>
 
 <?php

@@ -9,7 +9,7 @@ function getDB()
     $dbHost="localhost"; 
 	$dbUser="root"; 
 	$dbPwd=""; 
-	$dbName="p1905223";
+	$dbName="root";
 	
 	$db=mysqli_connect($dbHost,$dbUser,$dbPwd, $dbName);
     if(mysqli_connect_errno())

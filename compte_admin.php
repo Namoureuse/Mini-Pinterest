@@ -1,10 +1,9 @@
 <?php
 	session_start();
  	require_once('bd.php');
- 	require_once('utilisateur.php');
- 	//require_once('upload_picture.php');
- 	$db=getDB();
+ 	require_once('fonctions.php');
   $repertoire="data/";
+  $db = getDB();
 
  	$isConnected = isConnected();
 
@@ -32,13 +31,19 @@
   $queryPhotos = executeQuery($db, "SELECT * FROM photo".$querySelectionWhere);
   $photos = $queryPhotos->fetch_all(MYSQLI_ASSOC);
 
+    if (isset($_POST['photoId'])){ // si on change la valeur
+      $status = $_POST["status"]; 
+      changePhotoStatus($db, $_POST['photoId'], $status); //Fonction cahngePhotoStatus définie dans fonctions.php
+      header('Location:compte_admin.php'); //on recharge la page
+      exit();
+  }
 ?>
 
 <!doctype html>
 <html lang="fr">
   <head>
       <meta charset="utf-8">
-      <title>Compte utilisateur</title>
+      <title>Compte aministrateur</title>
       <link rel="stylesheet" href="style.css">
   </head>
 
@@ -151,10 +156,33 @@
               echo '<p><a href="suppr.php?photoId=' . $photo['photoId'] . '">Suppimer</a></p>';
             echo "</td>";
           echo "</tr>";
-        }
-      ?>
+          echo "<tr>";
+            echo '<td class="bordure">'; 
+            ?>
+              <form method="post" name="<?php echo $photo['photoId']; ?>">
+                    <select name="status" >
+                        <?php
+                          if ($photo['state'] == 0) { //si le state est à zéro la photo est cachée
+                        ?>
+                        <option value="1">Actif</option>
+                        <option value="0" selected="">Caché</option>
+                      <?php } else { ?>
+                        <option value="1" selected="">Actif</option>
+                        <option value="0">Caché</option>
+                      <?php } ?>
+                    </select> 
+                    <input type="hidden" name="photoId" value="<?php echo $photo['photoId']; ?>"> 
+                    <input type="submit" name="valider" value="Valider" class="button"/> 
+              </form>         
+            </td>
+          </tr>
+        
+        
+        <?php            
+
+          }
+        ?>
       </table>
     </div>
-
   </body>
 </html>
